@@ -18,8 +18,19 @@ jobs:
         registry: registry.gitlab.com
         username: ${{ secrets.GITLAB_REGISTRY_USER }}
         password: ${{ secrets.GITLAB_REGISTRY_PASSWORD }}
+    - name: Extract tag
+      shell: bash
+      run: echo "::set-output name=tag::$(echo ${GITHUB_REF#refs/tags/} | sed s:/:-:g)"
+      id: extract_tag
     - name: Build and push
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: registry.gitlab.com/parisk/compose-cli:1.0.9
+        tags: registry.gitlab.com/parisk/compose-cli:${{ steps.extract_tag.outputs.tag }}
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: registry.gitlab.com/parisk/compose-cli:${{ steps.extract_tag.outputs.tag }}-aws
+        args: |
+          BASE_IMAGE=registry.gitlab.com/parisk/compose-cli:${{ steps.extract_tag.outputs.tag }}
