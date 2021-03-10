@@ -22,4 +22,4 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: registry.gitlab.com/parisk/compose-cli
+        tags: registry.gitlab.com/parisk/compose-cli:1.0.9
