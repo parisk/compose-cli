@@ -1,6 +1,8 @@
 name: GitLab Container Registry
 
-on: release
+on:
+  release:
+    types: [published]
 
 jobs:
 
