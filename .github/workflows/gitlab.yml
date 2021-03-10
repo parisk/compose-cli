@@ -31,6 +31,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
+        file: aws.Dockerfile
         tags: registry.gitlab.com/parisk/compose-cli:${{ steps.extract_tag.outputs.tag }}-aws
         args: |
           BASE_IMAGE=registry.gitlab.com/parisk/compose-cli:${{ steps.extract_tag.outputs.tag }}
