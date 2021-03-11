@@ -1,5 +1,5 @@
 ARG DOCKER_VERSION=20.10.5
-FROM docker:${DOCKER_VERSION}
+FROM docker:${DOCKER_VERSION} as base
 
 ARG COMPOSE_CLI_VERSION=v1.0.9
 RUN wget https://github.com/docker/compose-cli/releases/download/${COMPOSE_CLI_VERSION}/docker-linux-amd64.tar.gz &&\
@@ -12,3 +12,8 @@ RUN wget https://github.com/docker/compose-cli/releases/download/${COMPOSE_CLI_V
     export DOCKER_DIR=$(dirname $DOCKER_PATH) &&\
     mv ${DOCKER_PATH} ${DOCKER_DIR}/com.docker.cli &&\
     ln -s ${COMPOSE_CLI_DIR}/docker ${DOCKER_PATH}
+
+FROM base as aws
+
+RUN apk add py-pip
+RUN pip install awscli==1.18.142
