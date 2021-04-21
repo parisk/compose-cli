@@ -1,7 +1,7 @@
 ARG DOCKER_VERSION=20.10.5
 FROM docker:${DOCKER_VERSION} as base
 
-ARG COMPOSE_CLI_VERSION=v1.0.9
+ARG COMPOSE_CLI_VERSION=v1.0.13
 RUN wget https://github.com/docker/compose-cli/releases/download/${COMPOSE_CLI_VERSION}/docker-linux-amd64.tar.gz &&\
     tar xzf docker-linux-amd64.tar.gz &&\
     rm docker-linux-amd64.tar.gz &&\
