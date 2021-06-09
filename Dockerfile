@@ -1,17 +1,19 @@
-ARG DOCKER_VERSION=20.10.7
-FROM docker:${DOCKER_VERSION} as base
+FROM ubuntu:20.04 as base
 
-ARG COMPOSE_CLI_VERSION=v2.0.0-beta.3
-ARG BINARY_FILE_NAME=docker-compose-linux-amd64
-ARG DOCKER_CLI_PLUGINS_DIR=/root/.docker/cli-plugins
+ARG COMPOSE_CLI_VERSION=v1.0.17
 
-RUN mkdir -p ${DOCKER_CLI_PLUGINS_DIR}
-RUN wget https://github.com/docker/compose-cli/releases/download/${COMPOSE_CLI_VERSION}/${BINARY_FILE_NAME} &&\
-    mv ./${BINARY_FILE_NAME} ${DOCKER_CLI_PLUGINS_DIR}/docker-compose &&\
-    chmod +x ${DOCKER_CLI_PLUGINS_DIR}/docker-compose
+RUN apt-get update &&\
+    apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release &&\
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg &&\
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null &&\
+    apt-get update &&\
+    apt-get install -y docker-ce-cli
+
+ARG DOWNLOAD_URL=https://github.com/docker/compose-cli/releases/download/v1.0.17/docker-linux-amd64
+RUN curl -L https://raw.githubusercontent.com/docker/compose-cli/${COMPOSE_CLI_VERSION}/scripts/install/install_linux.sh | sh
 
 FROM base as aws
 
-RUN apk add py-pip
+RUN apt-get -y install python3-pip
 ARG AWS_CLI_VERSION=1.19.90
 RUN pip install awscli==${AWS_CLI_VERSION}
