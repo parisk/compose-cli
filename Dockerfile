@@ -13,4 +13,5 @@ RUN wget https://github.com/docker/compose-cli/releases/download/${COMPOSE_CLI_V
 FROM base as aws
 
 RUN apk add py-pip
-RUN pip install awscli==1.18.142
+ARG AWS_CLI_VERSION=1.19.90
+RUN pip install awscli==${AWS_CLI_VERSION}
