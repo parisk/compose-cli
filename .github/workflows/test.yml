@@ -1,5 +1,7 @@
 name: Test build
 
+on: push
+
 jobs:
   build:
 
